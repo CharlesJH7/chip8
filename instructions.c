@@ -316,11 +316,11 @@ void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 
 		for(u8 xCoord = 0; xCoord < 8; xCoord++){ 
 			if((pixel & (0x80 >> xCoord)) != 0){
-				if(chip->Display[xPos + xCoord][yPos + yCoord] == 1){
+				if(chip->Display[yPos + yCoord][xPos + xCoord] == 1){
 					chip->V[0xF] = 1;
 				} 
 				
-				chip->Display[xPos + xCoord][yPos + yCoord] ^= 1;
+				chip->Display[yPos + yCoord][xPos + xCoord] ^= 1;
 			}	
 		}
 	}
