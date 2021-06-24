@@ -306,8 +306,6 @@ void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 	u8 xPos = chip->V[x];
 	u8 yPos = chip->V[y];
 	u8 pixel;
-
-	printf("xPos: %X yPos: %X", xPos, yPos);
 	
 	chip->V[0xF] = 0;
 

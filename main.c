@@ -63,15 +63,16 @@ int main(int argc, char *argv[]) {
 	SDL_Init(SDL_INIT_VIDEO);
 
 	SDL_Window *window = SDL_CreateWindow("Chip-8", 0,0,640,480, SDL_WINDOW_OPENGL);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
 	
-	SDL_GL_CreateContext(window);
+	//SDL_GL_CreateContext(window);
 
-	SDL_GL_SwapWindow(window);	
+	//SDL_GL_SwapWindow(window);	
 
-	SDL_Renderer *renderer;
-	SDL_Surface *surface;
+	
+	//SDL_Surface *surface;
     	
-	
+	//SDL_BlitSurface(chip->Display, NULL, surface, NULL);
 		
 				
 

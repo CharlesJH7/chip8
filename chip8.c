@@ -144,14 +144,10 @@ u8 loadProgram(chip8 *chip, char *fileName){
     return 0;
 }
 
-
-
-
-
 u8 readByte(chip8 *chip, u16 address){
-    //get the byte from the ram at address X
-    return chip->ram[address];
+	return *(chip->ram + address);
 }
+
 
 void runChip8(chip8 *chip){
 
