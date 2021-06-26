@@ -37,11 +37,6 @@ int main(int argc, char *argv[]) {
 
     int i = 0;
 
-	FILE *fp;
-
-	fp = fopen("chip8Log.txt", "w"); //open File for writing 	
-
-
 
     while(1) {
         printf("\n-----------------\n");
@@ -65,16 +60,16 @@ int main(int argc, char *argv[]) {
 	SDL_Window *window = SDL_CreateWindow("Chip-8", 0,0,640,480, SDL_WINDOW_OPENGL);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
 	
-	//SDL_GL_CreateContext(window);
+    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//SDL_GL_SwapWindow(window);	
+    SDL_UpdateTexture(texture, NULL, chip->Display, SCREEN_WIDTH * sizeof(uint32_t));
+    SDL_RenderCopy(renderer, texture, NULL, NULL);
 
+    SDL_RenderPresent(renderer);
 	
-	//SDL_Surface *surface;
-    	
-	//SDL_BlitSurface(chip->Display, NULL, surface, NULL);
+	
 		
-				
+	
 
 	SDL_Delay(2000);	
 

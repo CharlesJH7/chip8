@@ -432,7 +432,13 @@ void runChip8(chip8 *chip){
 void debugDraw(chip8 *chip){
 	for(int x = 0; x < DISPLAY_HEIGHT; x++){
 		for(int y = 0; y < DISPLAY_WIDTH; y++){
-			printf("%d", chip->Display[x][y]);
+			
+            if(chip->Display[x][y] == 1){
+                printf("░");
+            }else{
+                printf("█"); 
+            }
+            
 		}
    }     
 }
