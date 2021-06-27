@@ -40,7 +40,7 @@ chip8* allocNewChip8(){
 
 	for(int x = 0; x < DISPLAY_WIDTH; x++){
 		for(int y = 0; y < DISPLAY_HEIGHT; y++){
-			chip->Display[x][y] = 0;
+			chip->Display[x * y] = 0;
 		}
 	}   
 
@@ -430,17 +430,17 @@ void runChip8(chip8 *chip){
 }
 
 void debugDraw(chip8 *chip){
-	for(int x = 0; x < DISPLAY_WIDTH; x++){
-		for(int y = 0; y < DISPLAY_HEIGHT; y++){
-			
-            if(chip->Display[x][y] == 1){
-                printf("█");
-            }else{
-                printf("░"); 
-            }
-            
-		}
-   }     
+	for(int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++){
+        if(chip->Display[i] == 1){
+            printf("█");
+        }else{
+            printf("░");
+        }
+
+        if(i % 64 == 0){
+            printf("\n");
+        }
+    }     
 }
 
 

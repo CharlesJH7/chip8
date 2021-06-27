@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "chip8.h"
+#include "display.h"
+
 
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
@@ -48,16 +50,15 @@ int main(int argc, char *argv[]) {
 		i++;
 			
 
-        if(i == 50){
-            break;
-        }
-
     }
-	
-	
+
+	Display *dspl;
+	initializeDisplay(dspl);
 
 
-    
+
+
+    SDL_Delay(2000);
 
     return 0;
 

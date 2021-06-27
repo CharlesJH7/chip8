@@ -53,7 +53,7 @@ typedef struct chip8{
 
 
 
-    u8 Display[DISPLAY_WIDTH][DISPLAY_HEIGHT];
+    u8 Display[DISPLAY_WIDTH * DISPLAY_HEIGHT];
 
     u8 *ram;
 
