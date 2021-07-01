@@ -38,11 +38,9 @@ chip8* allocNewChip8(){
     };
 
 
-	for(int x = 0; x < DISPLAY_WIDTH; x++){
-		for(int y = 0; y < DISPLAY_HEIGHT; y++){
-			chip->Display[x * y] = 0;
-		}
-	}   
+	for(int i = 0; i < (DISPLAY_WIDTH * DISPLAY_HEIGHT); i++){
+        chip->display[i] = 0;
+    }
 
 
     //program counter starts at 0x200
@@ -57,13 +55,13 @@ chip8* allocNewChip8(){
     chip->stackPointer = 0x52;
     chip->I = 0;
 
-    chip->drawFlag = 0;
-
     chip->delayTimer = 0;
     chip->soundTimer = 0;
 
     chip->Keys = calloc(sizeof(chip->Keys), KEY_AMT);
     chip->stack = calloc(sizeof(chip->stack), STACK_SIZE);
+
+    chip->drawFlag = 0;
 
     return chip;
 }
@@ -96,6 +94,7 @@ void printChip8(chip8 *chip){
     printf("\tdelay: %02X\n", chip->delayTimer);
 
     printf("\n\tStack Pointer: %01X\n", chip->stackPointer);
+    
 
     printf(":Chip8 End State\n\n");
 
@@ -331,6 +330,8 @@ void runChip8(chip8 *chip){
                 printf("%04X Draw %01x-byte sprite in memory location %04X at (%i, %i) "
                        "Set V[F] = collision\n", Opcode, n, chip->I, chip->V[x], chip->V[y]);
             DRWsprite(chip, chip->V[x], chip->V[y], n);
+            debugDraw(chip);
+
             break;
 
         case 0xE000:
@@ -425,22 +426,25 @@ void runChip8(chip8 *chip){
             break;
     }
 
-	chip->programCounter += 2;
+    chip->programCounter += 2;
 
 }
 
 void debugDraw(chip8 *chip){
-	for(int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++){
-        if(chip->Display[i] == 1){
-            printf("█");
-        }else{
-            printf("░");
-        }
+	if(chip->drawFlag){
+        for(int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++){
+            if(chip->display[i] == 1){
+                printf("█");
+            }else{
+                printf("░");
+            }
 
-        if(i % 64 == 0){
-            printf("\n");
-        }
-    }     
+            if(i % 64 == 0){
+                printf("\n");
+            }
+
+        }     
+    }
 }
 
 

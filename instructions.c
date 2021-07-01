@@ -43,8 +43,8 @@ void SysAddr(chip8 *chip, u16 nnn){
 
 void CLS(chip8 *chip){
 
-    for(int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++){
-            chip->Display[i] = 0;
+    for(int i = 0; i < (DISPLAY_WIDTH * DISPLAY_HEIGHT); i++){
+            chip->display[i] = 0;
     }
 
     chip->drawFlag = 1;
@@ -59,7 +59,7 @@ void CLS(chip8 *chip){
 //then subtracts 1 from the stack pointer.
 
 void RET(chip8 *chip){
-    --chip->stackPointer;
+    chip->stackPointer--;
     chip->programCounter = chip->stack[chip->stackPointer];
 }
 
@@ -69,6 +69,7 @@ void RET(chip8 *chip){
 //WORKS
 void JPaddr(chip8 *chip, u16 nnn){
     chip->programCounter = nnn;
+    chip->programCounter -= 2;
 }
 
 //2nnn - CALL addr
@@ -79,7 +80,7 @@ void JPaddr(chip8 *chip, u16 nnn){
 
 void CALLaddr(chip8 *chip, u16 nnn){
     chip->stack[chip->stackPointer] = chip->programCounter;
-    ++chip->stackPointer;
+    chip->stackPointer++;
     chip->programCounter = nnn;
 }
 
@@ -129,7 +130,7 @@ void LDVXbyte(chip8 *chip, u8 x, u8 kk){
 //Adds the value kk to the value of register Vx, then stores the result in Vx.
 //WORKS
 void ADDVXbyte(chip8 *chip, u8 x, u8 kk){
-    chip->V[x] = chip->V[x] + kk;
+    chip->V[x] += kk;
 }
 
 //8xy0 - LD Vx, Vy
@@ -208,13 +209,8 @@ void SUBVXVY(chip8 *chip, u8 x, u8 y){
 //then VF is set to 1, otherwise 0. Then Vx is divided by 2.
 //WORKS
 void SHRVX(chip8 *chip, u8 x){
-    if(chip->V[x] & 0x1){
-        chip->V[0xF] = 1;
-    }else{
-        chip->V[0xF] = 0;
-    }
+    chip->V[0xF] = chip->V[x] & 0x1;
     chip->V[x] = chip->V[x] >> 1;
-
 }
 
 //8xy7 - SUBN Vx, Vy
@@ -241,13 +237,8 @@ void SUBNVXVY(chip8 *chip, u8 x, u8 y){
 // Then Vx is multiplied by 2.
 //WORKS
 void SHLVX(chip8 *chip, u8 x){
-    if(0x80 & chip->V[x]){
-        chip->V[0xF] = 1;
-    }else{
-        chip->V[0xF] = 0;
-    }
+    chip->V[0xF] = chip->V[x] >> 7;
     chip->V[x] = chip->V[x] << 1;
-
 }
 
 //9xy0 - SNE Vx, Vy
@@ -265,7 +256,7 @@ void SNEVXVY(chip8 *chip, u8 x, u8 y){
 //Annn - LD I, addr
 //Set I = nnn
 //The value of register I is set to nnn.
-//WORKS
+
 void LDIaddr(chip8 *chip, u16 nnn){
     chip->I = nnn;
 }
@@ -307,22 +298,20 @@ void RNDVXbyte(chip8 *chip, u8 x, u8 kk){
 
 void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 
-	u8 xPos = chip->V[x];
-	u8 yPos = chip->V[y];
 	u8 pixel;
 	
 	chip->V[0xF] = 0;
 
-	for(u8 yCoord = 0; yCoord < n; yCoord++){
-		pixel = chip->ram[chip->I + yCoord];
+	for(int yLine = 0; yLine < n; yLine++){
+		pixel = chip->ram[chip->I + yLine];
 
-		for(u8 xCoord = 0; xCoord < 8; xCoord++){ 
-			if((pixel & (0x80 >> xCoord)) != 0){
-				if(chip->Display[xPos + xCoord + (yPos + yCoord) * 64] == 1){
+		for(u8 xLine = 0; xLine < 8; xLine++){ 
+			if((pixel & (0x80 >> xLine)) != 0){
+				if(chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 64)] == 1){
 					chip->V[0xF] = 1;
 				} 
 				
-				chip->Display[xPos + xCoord + (yPos + yCoord) * 64] ^= 1;
+				chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 64)] ^= 1;
 			}	
 		}
 	}
@@ -402,7 +391,7 @@ void LDSTVX(chip8 *chip, u8 x){
 //The values of I and Vx are added, and the results are stored in I.
 //WORKS
 void ADDIVX(chip8 *chip, u8 x){
-    chip->I = chip->I + chip->V[x];
+    chip->I += chip->V[x];
 }
 
 //Fx29 - LD F, Vx
@@ -443,6 +432,9 @@ void LDIVX(chip8 *chip, u8 x){
     for(int i = 0; i <= x; i++){
        *(chip->ram + (chip->I+i)) = chip->V[i];
     }
+
+    chip->I += x + 1; //I's address is now the address
+				      // after the end of the assignment
 }
 
 //Fx65 - LD Vx, [I]
@@ -452,7 +444,7 @@ void LDIVX(chip8 *chip, u8 x){
 // V0 through Vx.
 //WORKS
 void LDVXI(chip8 *chip, u8 x){
-    for(int i = 0; i < x; i++){
+    for(int i = 0; i <= x; i++){
         chip->V[i] = *(chip->ram + (chip->I + i));
     }
 

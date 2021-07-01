@@ -38,6 +38,8 @@ int main(int argc, char *argv[]) {
 
     int i = 0;
 
+    Display *dsply = malloc(sizeof(dsply));
+    createWindow(dsply);
 
     while(1) {
         printf("\n-----------------\n");
@@ -45,20 +47,21 @@ int main(int argc, char *argv[]) {
         printf("\n-----------------\n");
 
         printChip8(chip);
+        
         runChip8(chip);
-        debugDraw(chip);
+        updateWindow(chip, dsply);
 		i++;
 			
+        if(i == 500){
+            break;
+        }
 
     }
 
-	Display *dspl;
-	initializeDisplay(dspl);
+    
+    destroyWindow(dsply);
 
-
-
-
-    SDL_Delay(2000);
+    free(chip);
 
     return 0;
 

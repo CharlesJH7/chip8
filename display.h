@@ -12,9 +12,8 @@ typedef struct Display{
 
 
 //initializes Display's window, renderer and texture
-int initializeDisplay(Display *display);
+void createWindow(Display *display);
 
-//Returns the SDL Surface of the chip8's current display frame
-SDL_Surface *getDisplay(chip8 *chip);
+void updateWindow(chip8 *chip, Display *display);
 
-void updateDisplay(Display *display);
+void destroyWindow(Display *dsply);
