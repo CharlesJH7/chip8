@@ -1,8 +1,7 @@
 #include "display.h"
 #include "SDL2/SDL.h"
 
-#define W 64
-#define H 32
+
 
 
 void createWindow(Display *dsply){
@@ -23,23 +22,9 @@ void createWindow(Display *dsply){
                                         );
 }
 
-void updateWindow(chip8 *chip, Display *dsply){
-    u16 pixels[W*H];
-
-    SDL_SetRenderDrawColor(dsply->renderer, 0x00, 0x00, 0x00, 0xFF);
-    SDL_RenderClear(dsply->renderer);
-
-    if(chip->drawFlag == 1){
-        
-        for(u8 i = 0; i < (W * H); i++){
-            u16 pixel = chip->display[i];
-            
-        }
-
-    }
+void updateWindow(u8 pixels[W * H], Display *dsply){
     
-
-    SDL_UpdateTexture(dsply->texture, NULL, pixels, 64 * sizeof(u8));
+    SDL_UpdateTexture(dsply->texture, NULL, pixels, 64 * sizeof(uint32_t));
     SDL_RenderClear(dsply->renderer);
     SDL_RenderCopy(dsply->renderer, dsply->texture, NULL, NULL);
     SDL_RenderPresent(dsply->renderer);

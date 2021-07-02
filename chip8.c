@@ -73,11 +73,11 @@ void printChip8(chip8 *chip){
 
     printf("\tProgram Counter: %04X\n", chip->programCounter);
     printf("\tI: %03X\n\n", chip->I);
-    printf("\t*I: %03X\n", *(chip->ram + chip->I));
-    printf("\t*I + 1: %03X\n", *(chip->ram + (chip->I + 1)));
-    printf("\t*I + 2: %03X\n", *(chip->ram + (chip->I + 2)));
-    printf("\t*I + 3: %03X\n", *(chip->ram + (chip->I + 3)));
-    printf("\t*I + 4: %03X\n\n", *(chip->ram + (chip->I + 4)));
+    printf("\t*I: %03X\n", chip->ram[chip->I]);
+    printf("\t*I + 1: %03X\n", chip->ram[chip->I + 1]);
+    printf("\t*I + 2: %03X\n", chip->ram[chip->I + 2]);
+    printf("\t*I + 3: %03X\n", chip->ram[chip->I + 3]);
+    printf("\t*I + 4: %03X\n\n", chip->ram[chip->I + 4]);
 
     printf("\tV%X: %02X\tV%X: %02X\tV%X: %02X\tV%X: %02X\t\n",
            0, chip->V[0], 1, chip->V[1], 2, chip->V[2], 3, chip->V[3]);
@@ -329,7 +329,7 @@ void runChip8(chip8 *chip){
             if(debug)
                 printf("%04X Draw %01x-byte sprite in memory location %04X at (%i, %i) "
                        "Set V[F] = collision\n", Opcode, n, chip->I, chip->V[x], chip->V[y]);
-            DRWsprite(chip, chip->V[x], chip->V[y], n);
+            DRWsprite(chip, x, y, n);
             debugDraw(chip);
 
             break;
@@ -403,13 +403,12 @@ void runChip8(chip8 *chip){
                                "into memory location %04X through %04X\n",
                                Opcode, x, chip->I, (chip->I + x));
 
-
                     LDIVX(chip, x);
                     break;
 
                 case 0x65:
                     if(debug)
-                        printf("%04X Read into registers V[0] through V[%01X] "
+                        printf("%04X Read from registers V[0] through V[%01X] "
                                "from memory location %04X through %04X\n",
                                Opcode, x, chip->I, (chip->I + x));
                     LDVXI(chip, x);
@@ -439,7 +438,7 @@ void debugDraw(chip8 *chip){
                 printf("░");
             }
 
-            if(i % 64 == 0){
+            if(i % 63 == 0){
                 printf("\n");
             }
 

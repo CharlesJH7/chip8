@@ -11,11 +11,8 @@
 #include "chip8.h"
 #include "display.h"
 
-
 #define SCREEN_WIDTH 64
 #define SCREEN_HEIGHT 32
-
-//http://lazyfoo.net/tutorials/SDL/01_hello_SDL/index2.php
 
 
 int main(int argc, char *argv[]) {    
@@ -47,17 +44,13 @@ int main(int argc, char *argv[]) {
         printf("\n-----------------\n");
 
         printChip8(chip);
-        
         runChip8(chip);
-        updateWindow(chip, dsply);
+        updateWindow(chip->display, dsply);
 		i++;
 			
-        if(i == 500){
-            break;
-        }
-
     }
 
+    debugDraw(chip);
     
     destroyWindow(dsply);
 

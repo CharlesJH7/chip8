@@ -59,8 +59,10 @@ void CLS(chip8 *chip){
 //then subtracts 1 from the stack pointer.
 
 void RET(chip8 *chip){
-    chip->stackPointer--;
+    
     chip->programCounter = chip->stack[chip->stackPointer];
+    chip->stackPointer--;
+
 }
 
 //1nnn - JP addr
@@ -79,8 +81,8 @@ void JPaddr(chip8 *chip, u16 nnn){
 // The PC is then set to nnn.
 
 void CALLaddr(chip8 *chip, u16 nnn){
-    chip->stack[chip->stackPointer] = chip->programCounter;
     chip->stackPointer++;
+    chip->stack[chip->stackPointer] = chip->programCounter;
     chip->programCounter = nnn;
 }
 
@@ -307,11 +309,11 @@ void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 
 		for(u8 xLine = 0; xLine < 8; xLine++){ 
 			if((pixel & (0x80 >> xLine)) != 0){
-				if(chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 64)] == 1){
+				if(chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 63)] == 1){
 					chip->V[0xF] = 1;
 				} 
 				
-				chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 64)] ^= 1;
+				chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 63)] ^= 1;
 			}	
 		}
 	}
@@ -429,8 +431,8 @@ void LDBVX(chip8 *chip, u8 x){
 // starting at the address in I.
 //WORKS
 void LDIVX(chip8 *chip, u8 x){
-    for(int i = 0; i <= x; i++){
-       *(chip->ram + (chip->I+i)) = chip->V[i];
+    for(int i = 0; i <=x; i++){
+       chip->ram[chip->I+i] = chip->V[i];
     }
 
     chip->I += x + 1; //I's address is now the address
@@ -445,7 +447,7 @@ void LDIVX(chip8 *chip, u8 x){
 //WORKS
 void LDVXI(chip8 *chip, u8 x){
     for(int i = 0; i <= x; i++){
-        chip->V[i] = *(chip->ram + (chip->I + i));
+        chip->V[i] = chip->ram[(chip->I + i)];
     }
 
 	chip->I += x + 1; //I's address is now the address
