@@ -150,7 +150,7 @@ u8 readByte(chip8 *chip, u16 address){
 
 void runChip8(chip8 *chip){
 
-    int debug = 1;
+    int debug = 0;
 
     u8 high = readByte(chip, chip->programCounter); // High byte
     u8 low = readByte(chip, chip->programCounter + 1); //Low byte
@@ -426,7 +426,7 @@ void runChip8(chip8 *chip){
     }
 
     chip->programCounter += 2;
-
+    
 }
 
 void debugDraw(chip8 *chip){

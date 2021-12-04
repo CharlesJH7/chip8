@@ -47,6 +47,16 @@ int main(int argc, char *argv[]) {
         runChip8(chip);
         updateWindow(chip->display, dsply);
 		i++;
+
+		SDL_Event e;
+	
+		if(SDL_PollEvent(&e)){
+			if(e.type == SDL_QUIT){
+				break;
+			}
+
+		}
+
 			
     }
 

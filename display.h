@@ -5,6 +5,8 @@
 #define W 64
 #define H 32
 
+#define WINDOW_SCALE 15
+
 typedef struct Display{
 
     SDL_Window *window;
@@ -20,3 +22,9 @@ void createWindow(Display *display);
 void updateWindow(u8 pixels[W * H], Display *display);
 
 void destroyWindow(Display *dsply);
+
+
+
+
+
+

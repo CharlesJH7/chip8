@@ -59,10 +59,10 @@ void CLS(chip8 *chip){
 //then subtracts 1 from the stack pointer.
 
 void RET(chip8 *chip){
-    
-    chip->programCounter = chip->stack[chip->stackPointer];
-    chip->stackPointer--;
+    chip->programCounter = chip->stack[chip->stackPointer--];
 
+    //printf("Address on stack: %02X\n", chip->stack[chip->stackPointer]);
+    chip->programCounter -= 2;
 }
 
 //1nnn - JP addr
@@ -81,9 +81,10 @@ void JPaddr(chip8 *chip, u16 nnn){
 // The PC is then set to nnn.
 
 void CALLaddr(chip8 *chip, u16 nnn){
-    chip->stackPointer++;
     chip->stack[chip->stackPointer] = chip->programCounter;
+    chip->stackPointer++;
     chip->programCounter = nnn;
+    chip->programCounter -= 2;
 }
 
 //3xkk - SE Vx, byte
@@ -196,7 +197,7 @@ void ADDVXVY(chip8 *chip, u8 x, u8 y){
 // Then Vy is subtracted from Vx, and the results stored in Vx.
 //WORKS
 void SUBVXVY(chip8 *chip, u8 x, u8 y){
-    if(chip->V[x] > chip->V[y]){
+    if(chip->V[x] >= chip->V[y]){
         chip->V[0xF] = 1;
     }else{
         chip->V[0xF] = 0;
@@ -222,7 +223,7 @@ void SHRVX(chip8 *chip, u8 x){
 //
 void SUBNVXVY(chip8 *chip, u8 x, u8 y){
 
-    if(chip->V[y] > chip->V[x]){
+    if(chip->V[y] >= chip->V[x]){
         chip->V[0xF] = 1;
     }else{
         chip->V[0xF] = 0;
@@ -391,7 +392,6 @@ void LDSTVX(chip8 *chip, u8 x){
 //Fx1E - ADD I, Vx
 //Set I = I + Vx
 //The values of I and Vx are added, and the results are stored in I.
-//WORKS
 void ADDIVX(chip8 *chip, u8 x){
     chip->I += chip->V[x];
 }
@@ -409,7 +409,6 @@ void LDFVX(chip8 *chip, u8 x){
 //The interpreter takes the decimal value of Vx, and places the hundreds digit
 //in memory at location I, the tens digit at location I+1,
 //and the ones digit at location I+2.
-//WORKS
 void LDBVX(chip8 *chip, u8 x){
 
     u8 value = chip->V[x];
@@ -429,13 +428,12 @@ void LDBVX(chip8 *chip, u8 x){
 //The interpreter copies
 // the values of registers V0 through Vx into memory,
 // starting at the address in I.
-//WORKS
 void LDIVX(chip8 *chip, u8 x){
-    for(int i = 0; i <=x; i++){
+    for(int i = 0; i <= x; i++){
        chip->ram[chip->I+i] = chip->V[i];
     }
 
-    chip->I += x + 1; //I's address is now the address
+    chip->I += (x + 1); //I's address is now the address
 				      // after the end of the assignment
 }
 
@@ -444,7 +442,6 @@ void LDIVX(chip8 *chip, u8 x){
 //The interpreter reads values from memory
 // starting at location I into registers
 // V0 through Vx.
-//WORKS
 void LDVXI(chip8 *chip, u8 x){
     for(int i = 0; i <= x; i++){
         chip->V[i] = chip->ram[(chip->I + i)];
