@@ -302,7 +302,6 @@ void RNDVXbyte(chip8 *chip, u8 x, u8 kk){
 void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 
 	u8 pixel;
-	
 	chip->V[0xF] = 0;
 
 	for(int yLine = 0; yLine < n; yLine++){
@@ -433,8 +432,7 @@ void LDIVX(chip8 *chip, u8 x){
        chip->ram[chip->I+i] = chip->V[i];
     }
 
-    chip->I += (x + 1); //I's address is now the address
-				      // after the end of the assignment
+    return;
 }
 
 //Fx65 - LD Vx, [I]
@@ -447,8 +445,7 @@ void LDVXI(chip8 *chip, u8 x){
         chip->V[i] = chip->ram[(chip->I + i)];
     }
 
-	chip->I += x + 1; //I's address is now the address
-				      // after the end of the assignment
+    return;
 }
 
 void UNKWN_Opcode(u16 Opcode){

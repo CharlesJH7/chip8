@@ -14,6 +14,8 @@
 
 chip8* allocNewChip8(){
 
+    printf("Allocating new chip8");
+
     chip8* chip = malloc(sizeof(chip8));
 
     //Should be stored in chip8 memory, 0x000 to 0x1FF
@@ -39,8 +41,8 @@ chip8* allocNewChip8(){
 
 
 	for(int i = 0; i < (DISPLAY_WIDTH * DISPLAY_HEIGHT); i++){
-        chip->display[i] = 0;
-    }
+        	chip->display[i] = 0;
+    	}
 
 
     //program counter starts at 0x200
@@ -150,12 +152,12 @@ u8 readByte(chip8 *chip, u16 address){
 
 void runChip8(chip8 *chip){
 
-    int debug = 0;
+    int debug = 1;
 
     u8 high = readByte(chip, chip->programCounter); // High byte
     u8 low = readByte(chip, chip->programCounter + 1); //Low byte
 
-    u16 Opcode = (high << 8 ) | low; //put high in the high byte, low in the low
+    u16 Opcode = (high << 8 ) | low; //put high in the high byte, low in the low of Opcode
 
     //nnn or addr - A 12-bit value, the lowest 12 bits of the instruction
     //n or nibble - A 4-bit value, the lowest 4 bits of the instruction
@@ -433,9 +435,9 @@ void debugDraw(chip8 *chip){
 	if(chip->drawFlag){
         for(int i = 0; i < DISPLAY_WIDTH * DISPLAY_HEIGHT; i++){
             if(chip->display[i] == 1){
-                printf("█");
+                printf("X");
             }else{
-                printf("░");
+                printf(" ");
             }
 
             if(i % 63 == 0){

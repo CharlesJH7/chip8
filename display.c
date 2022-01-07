@@ -2,10 +2,8 @@
 #include "SDL2/SDL.h"
 
 void createWindow(Display *dsply){
-
-    SDL_Init(SDL_INIT_VIDEO);
-
-    dsply->window = SDL_CreateWindow(
+	
+	dsply->window = SDL_CreateWindow(
                                     "Chip-8", 
                                     SDL_WINDOWPOS_CENTERED, 
                                     SDL_WINDOWPOS_CENTERED, 
@@ -13,15 +11,12 @@ void createWindow(Display *dsply){
                                     SDL_WINDOW_SHOWN
                                     );
 
-    dsply->renderer = SDL_CreateRenderer(dsply->window, -1, SDL_RENDERER_ACCELERATED);
+	dsply->renderer = SDL_CreateRenderer(dsply->window, -1, SDL_RENDERER_ACCELERATED);
 	
-	SDL_SetRenderDrawColor(dsply->renderer, 0xFF,0xFF,0xFF,0xFF);
+	SDL_SetRenderDrawColor(dsply->renderer, 0x00,0x00,0x00,0x00);
 
-    dsply->texture = SDL_CreateTexture(dsply->renderer, 
-									   SDL_PIXELFORMAT_ARGB8888, 
-										SDL_TEXTUREACCESS_STATIC, 
-									    W, H);
-
+	dsply->texture = SDL_CreateTexture(dsply->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
+	printf("%d", dsply->texture);
    }
 
 void updateWindow(u8 pixels[W * H], Display *dsply){

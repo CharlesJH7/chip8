@@ -4,7 +4,7 @@
  * http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
  *
  */
-
+#define SDL_MAIN_HANDLED
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,6 +16,9 @@
 
 
 int main(int argc, char *argv[]) {    
+
+    SDL_SetMainReady();
+    SDL_Init(SDL_INIT_VIDEO);    
 
     chip8* chip = allocNewChip8();
  
@@ -55,16 +58,14 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 
-		}
-
-			
+		}					
     }
 
     debugDraw(chip);
     
-    destroyWindow(dsply);
+    //destroyWindow(dsply);
 
-    free(chip);
+    //free(chip);
 
     return 0;
 
