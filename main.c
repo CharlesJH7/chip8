@@ -1,4 +1,4 @@
-/* 
+ /* 
  *
  *
  * http://devernay.free.fr/hacks/chip8/C8TECH10.HTM
@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "chip8.h"
 #include "display.h"
 
@@ -37,9 +38,10 @@ int main(int argc, char *argv[]) {
     loadProgram(chip, argv[1]);
 
     int i = 0;
+    bool running;
 
     Display *dsply = malloc(sizeof(dsply));
-    createWindow(dsply);
+    createDisplay(dsply);
 
     while(1) {
         printf("\n-----------------\n");
@@ -48,7 +50,7 @@ int main(int argc, char *argv[]) {
 
         printChip8(chip);
         runChip8(chip);
-        updateWindow(chip->display, dsply);
+        
 		i++;
 
 		SDL_Event e;
@@ -58,14 +60,18 @@ int main(int argc, char *argv[]) {
 				break;
 			}
 
-		}					
+		}				
+
+
+        updateDisplay(chip, dsply);
+
     }
 
     debugDraw(chip);
     
-    //destroyWindow(dsply);
+    destroyDisplay(dsply);
 
-    //free(chip);
+    free(chip);
 
     return 0;
 

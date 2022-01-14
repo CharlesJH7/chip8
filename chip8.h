@@ -2,7 +2,7 @@
 // Created by charl on 12/29/2019.
 //
 
-#include <stdint-gcc.h>
+#include <stdint.h>
 
 #ifndef CHIP8_CPU_H
 #define CHIP8_CPU_H

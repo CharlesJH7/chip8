@@ -309,11 +309,11 @@ void DRWsprite(chip8 *chip, u8 x, u8 y, u8 n){
 
 		for(u8 xLine = 0; xLine < 8; xLine++){ 
 			if((pixel & (0x80 >> xLine)) != 0){
-				if(chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 63)] == 1){
+				if(chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * DISPLAY_WIDTH)] == 1){
 					chip->V[0xF] = 1;
 				} 
 				
-				chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * 63)] ^= 1;
+				chip->display[chip->V[x] + xLine + ((chip->V[y] + yLine) * DISPLAY_WIDTH)] ^= 1;
 			}	
 		}
 	}

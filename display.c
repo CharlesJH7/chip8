@@ -1,7 +1,7 @@
 #include "display.h"
 #include "SDL2/SDL.h"
 
-void createWindow(Display *dsply){
+void createDisplay(Display *dsply){
 	
 	dsply->window = SDL_CreateWindow(
                                     "Chip-8", 
@@ -13,26 +13,42 @@ void createWindow(Display *dsply){
 
 	dsply->renderer = SDL_CreateRenderer(dsply->window, -1, SDL_RENDERER_ACCELERATED);
 	
-	SDL_SetRenderDrawColor(dsply->renderer, 0x00,0x00,0x00,0x00);
+    dsply->texture = SDL_CreateTexture(dsply->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_TARGET, W, H);
 
-	dsply->texture = SDL_CreateTexture(dsply->renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STATIC, W, H);
-	printf("%d", dsply->texture);
-   }
+    
 
-void updateWindow(u8 pixels[W * H], Display *dsply){
-    
-    SDL_RenderClear(dsply->renderer);
-    SDL_UpdateTexture(dsply->texture, NULL, pixels, W * sizeof(u8));
-    
-    SDL_RenderCopy(dsply->renderer, dsply->texture, NULL, NULL);
+	SDL_SetRenderDrawColor(dsply->renderer, 0x00, 0x00,0x00, 0xFF);
     SDL_RenderPresent(dsply->renderer);
+
 }
 
-void destroyWindow(Display *dsply){
+void updateDisplay(chip8 *chip, Display *dsply){
+    
+    SDL_SetRenderDrawColor(dsply->renderer, 0xFF, 0xFF, 0xFF, 1);
+    
+    for(int y = 0; y < DISPLAY_HEIGHT; y++){
+        for(int x = 0; x < DISPLAY_WIDTH; x++){
+            printf("%d", chip->display[x+(y*DISPLAY_WIDTH)]);
+            if(chip->display[x + y * DISPLAY_WIDTH] == 1){
+                SDL_Rect rect = {x * WINDOW_SCALE, y * WINDOW_SCALE, WINDOW_SCALE, WINDOW_SCALE};
+                SDL_RenderFillRect(dsply->renderer, &rect);
+            }
+        }
+    }
+
+    //SDL_RenderCopy(dsply->renderer, dsply->texture, NULL, NULL);
+    SDL_RenderPresent(dsply->renderer);
+
+}
+
+void destroyDisplay(Display *dsply){
 
     SDL_DestroyTexture(dsply->texture);
     SDL_DestroyRenderer(dsply->renderer);
     SDL_DestroyWindow(dsply->window);
 
+    free(dsply);
+
     SDL_Quit();
+
 }

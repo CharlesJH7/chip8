@@ -17,11 +17,13 @@ typedef struct Display{
 
 
 //initializes Display's window, renderer and texture
-void createWindow(Display *display);
+void createDisplay(Display *display);
 
-void updateWindow(u8 pixels[W * H], Display *display);
+//updates 
+void updateDisplay(chip8 *chip, Display *display);
 
-void destroyWindow(Display *dsply);
+//free Display's window, renderer, texture
+void destroyDisplay(Display *dsply);
 
 
 
